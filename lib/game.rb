@@ -9,9 +9,7 @@ class Game
 
   def initialize
     @hangman = Hangman.new("Pirate")
-    # TODO braces optional so don't use () if there are no args
-    # TODO look at style guide (lessons from rubocop)
-    @input_output = InputOutput.new()
+    @input_output = InputOutput.new
     @controller = Controller.new(hangman, input_output)
   end
 
@@ -26,6 +24,9 @@ Game.new().play
 # TODO GENERAL: Single purpose Class, single purpose Method
 
 # TODO shameless green -> book? read it
+
+# TODO look at style guide (lessons from rubocop)
+# TODO braces optional so don't use () if there are no args
 
 # TODO shell script with bang at top (to start) || possibly bundler exe rb
 # TODO alphabetic not nummeric

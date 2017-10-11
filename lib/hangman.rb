@@ -7,6 +7,8 @@ class Hangman
 
   # TODO how do you test initialize?
   def initialize(word)
+    # TODO what's a good way to do validation in an initializeR
+    # valid_secret_word_message(word)
     @secret_word = secret_word_array(word)
     @guesses = []
   end
