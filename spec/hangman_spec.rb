@@ -3,12 +3,12 @@
 require 'hangman'
 
 describe Hangman do
-  describe '#secret_word_array' do
+  describe '#downcase_letters' do
     context 'when given empty string' do
       it 'returns empty array' do
         hangman = Hangman.new('')
 
-        expect(hangman.secret_word_array('')).to eql([])
+        expect(hangman.downcase_letters('')).to eql([])
       end
     end
 
@@ -16,7 +16,57 @@ describe Hangman do
       it "returns an array #{%w[h a r r y]}" do
         hangman = Hangman.new('')
 
-        expect(hangman.secret_word_array('harry')).to eql(%w[h a r r y])
+        expect(hangman.downcase_letters('harry')).to eql(%w[h a r r y])
+      end
+    end
+
+    context 'when given string "HArry" which contains uppercase letters' do
+      it "returns an array #{%w[h a r r y]}" do
+        hangman = Hangman.new('')
+
+        expect(hangman.downcase_letters('harry')).to eql(%w[h a r r y])
+      end
+    end
+  end
+
+  describe '#valid_guess_message' do
+    context 'when given non string object, Hash.new' do
+      it 'returns MUST_BE_A_STRING' do
+        hangman = Hangman.new('wizard')
+
+        expect(hangman.valid_guess_message(Hash.new)).to eql(Message::MUST_BE_A_STRING)
+      end
+    end
+
+    context 'when given empty string' do
+      it 'returns MUST_BE_ONE_LETTER_LONG' do
+        hangman = Hangman.new('wizard')
+
+        expect(hangman.valid_guess_message('')).to eql(Message::MUST_BE_ONE_LETTER_LONG)
+      end
+    end
+
+    context 'when given two letter string "xx"' do
+      it 'returns MUST_BE_ONE_LETTER_LONG' do
+        hangman = Hangman.new('wizard')
+
+        expect(hangman.valid_guess_message('xx')).to eql(Message::MUST_BE_ONE_LETTER_LONG)
+      end
+    end
+
+    context 'when given one non alphabetic letter "8"' do
+      it 'returns MUST_CONTAIN_ONLY_ALPHABETIC_CHARACTERS' do
+        hangman = Hangman.new('wizard')
+
+        expect(hangman.valid_guess_message('8')).to eql(Message::MUST_CONTAIN_ONLY_ALPHABETIC_CHARACTERS)
+      end
+    end
+
+    context 'when given one alphabetic letter "d"' do
+      it 'returns nil' do
+        hangman = Hangman.new('wizard')
+
+        expect(hangman.valid_guess_message('d')).to eql(nil)
       end
     end
   end
@@ -35,24 +85,6 @@ describe Hangman do
   #       hangman = Hangman.new('wizard')
   #
   #       expect(hangman.secret_word_length).to eql(6)
-  #     end
-  #   end
-  # end
-  #
-  # describe '#letter_in_secret_word?' do
-  #   context 'when secret_word is "wizard" and "letter_in_secret_word?" is "w"' do
-  #     it 'returns true' do
-  #       hangman = Hangman.new('wizard')
-  #
-  #       expect(hangman.letter_in_secret_word?('w')).to be(true)
-  #     end
-  #   end
-  #
-  #   context 'when secret_word is "wizard" and "letter_in_secret_word" is "x"' do
-  #     it 'returns false' do
-  #       hangman = Hangman.new('wizard')
-  #
-  #       expect(hangman.letter_in_secret_word?('x')).to be(false)
   #     end
   #   end
   # end
@@ -203,24 +235,6 @@ describe Hangman do
   #       hangman.lose_life
   #
   #       expect(hangman.remaining_lives).to eql(4)
-  #     end
-  #   end
-  # end
-  #
-  # describe '#lose_life' do
-  #   context 'when given empty string' do
-  #     it 'returns -1 lives' do
-  #       hangman = Hangman.new('')
-  #
-  #       expect(hangman.lose_life).to eql(-1)
-  #     end
-  #   end
-  #
-  #   context 'when given 6 letter word "wizard"' do
-  #     it 'returns 5 lives' do
-  #       hangman = Hangman.new('wizard')
-  #
-  #       expect(hangman.lose_life).to eql(5)
   #     end
   #   end
   # end
@@ -402,57 +416,8 @@ describe Hangman do
   #   end
   # end
   #
-  # describe '#valid_guess_message' do
-  #   # TODO how to test no argument
-  #   # context 'when given no argument' do
-  #   #   it 'returns ' do
-  #   #     hangman = Hangman.new('wizard')
-  #   #
-  #   #     expect(hangman.valid_guess_message()).to eql()
-  #   #   end
-  #   # end
-  #
-  #   context 'when given non string object, Hash' do
-  #     it 'returns MUST_BE_A_STRING' do
-  #       hangman = Hangman.new('wizard')
-  #
-  #       expect(hangman.valid_guess_message(Hash.new())).to eql(Message::MUST_BE_A_STRING)
-  #     end
-  #   end
-  #
-  #   context 'when given empty string' do
-  #     it 'returns MUST_BE_ONE_LETTER_LONG' do
-  #       hangman = Hangman.new('wizard')
-  #
-  #       expect(hangman.valid_guess_message('')).to eql(Message::MUST_BE_ONE_LETTER_LONG)
-  #     end
-  #   end
-  #
-  #   context 'when given two letter string "xx"' do
-  #     it 'returns MUST_BE_ONE_LETTER_LONG' do
-  #       hangman = Hangman.new('wizard')
-  #
-  #       expect(hangman.valid_guess_message('xx')).to eql(Message::MUST_BE_ONE_LETTER_LONG)
-  #     end
-  #   end
-  #
-  #   context 'when given one non alphanumeric letter "8"' do
-  #     it 'returns MUST_CONTAIN_ONLY_ALPHANUMERIC_CHARACTERS' do
-  #       hangman = Hangman.new('wizard')
-  #
-  #       expect(hangman.valid_guess_message('8')).to eql(Message::MUST_CONTAIN_ONLY_ALPHANUMERIC_CHARACTERS)
-  #     end
-  #   end
-  #
-  #   context 'when given one alphanumeric letter "d"' do
-  #     it 'returns nil' do
-  #       hangman = Hangman.new('wizard')
-  #
-  #       expect(hangman.valid_guess_message('d')).to eql(nil)
-  #     end
-  #   end
-  # end
-  #
+
+
   # describe '#valid_secret_word_message' do
   #   # TODO how to test no argument
   #   # context 'when given no argument' do

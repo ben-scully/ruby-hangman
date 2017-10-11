@@ -19,7 +19,6 @@ class Game
 end
 
 # TODO remove ()
-Game.new().play
 
 # TODO GENERAL: Single purpose Class, single purpose Method
 
